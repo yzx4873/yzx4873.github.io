@@ -732,6 +732,7 @@ header .go-back i {
 
 .index-card .card .card-content {
     padding: 20px 40px;
+	background-color: rgba(245,191,199,0.5)
 }
 
 @media only screen and (min-width: 1418px) {
@@ -750,7 +751,7 @@ header .go-back i {
 /*中等屏幕下(平板类)的样式*/
 @media only screen and (min-width: 600px) and (max-width: 992px) {
     .index-card .card .card-content {
-        padding: 20px 20px;
+        padding: 20px 0px 0px 0px;
     }
 }
 
