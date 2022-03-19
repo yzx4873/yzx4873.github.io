@@ -549,8 +549,68 @@ dirs: usage: <span class="token function">dirs</span> <span class="token punctua
 <p>​    -n 路径：删除目标路径。</p>
 <p>补充：如果 popd 后面添加路径不存在，则会删除目录栈最后一条路径。如果目录栈中有不存在的路径， popd 直接加相同不存在的路径内容，依旧会删除最后一条路径而不删除同名内容，使用 -n 路径 的参数则可以删除同名内容。</p>
 <hr>
-<h2 id="自己改进的目录栈"><a href="#自己改进的目录栈" class="headerlink" title="自己改进的目录栈"></a>自己改进的目录栈</h2><p>​    Linux自带的目录栈由于种种问题，并不能很好的满足我日常使用。对于一个更改目录使用 cd 成习惯的人，经常在添加目录栈时产生不必要的当前目录跳转，和将目录栈内容的修改，对于个人使用而言，将当前工作目录和目录栈的 index 0 联系起来只带来了许多麻烦。目录栈对于我最大的不方便在于目录栈不能永久储存，每次重启服务器就会消失，打开多个服务器页面又不能同步。</p>
+<h2 id="自己改进的目录栈"><a href="#自己改进的目录栈" class="headerlink" title="自己改进的目录栈"></a>自己改进的目录栈</h2><p>​    Linux自带的目录栈由于种种问题，并不能很好的满足我日常使用。第一，对于一个更改目录使用 cd 成习惯的人，经常在添加目录栈时产生不必要的当前目录跳转，和将目录栈内容的修改，对于个人使用而言，将当前工作目录和目录栈的 index 0 联系起来只带来了许多麻烦。第二， pushd 压入目录栈操作不能保证目录栈中的内容不重复，第三，目录栈对于我最大的不方便在于目录栈不能永久储存，每次重启服务器就会消失，打开多个服务器页面又不能同步。</p>
 <p>​    于是产生了针对自己的需要改进一下目录栈的想法。需要一个文件来储存目录路径，同样类似linux目录栈的操作，需要可以对其打印、目标路径调用，压入和弹出四个操作。</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#!/usr/bin/bash</span>
+
+<span class="token comment" spellcheck="true">#目录栈存储位置</span>
+ds_file<span class="token operator">=</span>/home/yangzhuoxuan/data/lib/DirectoryStack/list
+<span class="token comment" spellcheck="true">#不加参数则打印当前目录栈</span>
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">"<span class="token variable">$*</span>"</span> <span class="token operator">==</span> <span class="token string">""</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+        <span class="token function">cat</span> -n <span class="token variable">${ds_file}</span>
+<span class="token comment" spellcheck="true">#参数[-cdn]</span>
+<span class="token keyword">elif</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token variable">$1</span> <span class="token operator">==</span> -* <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+        <span class="token comment" spellcheck="true">#参数-n加数字，转到第几个路径</span>
+        <span class="token comment" spellcheck="true">##如果路径不存在则从目录栈中删除，防止文件夹删除而目录栈中未删除</span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$1</span> <span class="token operator">==</span> -n <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+                <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token variable">$2</span> <span class="token operator">=</span>~ ^<span class="token punctuation">[</span>0-9<span class="token punctuation">]</span>+$ <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+                        dir_name<span class="token operator">=</span>`sed -n <span class="token string">"<span class="token variable">${2}</span>p"</span> <span class="token variable">${ds_file}</span>`
+                        <span class="token keyword">if</span> <span class="token punctuation">[</span> -d <span class="token variable">${dir_name}</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+                                <span class="token keyword">echo</span> <span class="token variable">${dir_name}</span>
+                                <span class="token function">cd</span> <span class="token variable">${dir_name}</span>
+                        <span class="token keyword">else</span>
+                                <span class="token keyword">echo</span> <span class="token string">"<span class="token variable">${dir_name}</span> does not exist or is not a directory! Path deleted!"</span>
+                                <span class="token function">sed</span> -i <span class="token string">"<span class="token variable">${2}</span>d"</span> <span class="token variable">${ds_file}</span>
+                        <span class="token keyword">fi</span>
+                <span class="token keyword">else</span> 
+                        <span class="token keyword">echo</span> <span class="token string">"<span class="token variable">$2</span> is not a number!"</span>
+                <span class="token keyword">fi</span>
+        <span class="token comment" spellcheck="true">#参数-d加数字，从目录栈中删除第几个路径</span>
+        <span class="token keyword">elif</span> <span class="token punctuation">[</span> <span class="token variable">$1</span> <span class="token operator">==</span> -d <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+                <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token variable">$2</span> <span class="token operator">=</span>~ ^<span class="token punctuation">[</span>0-9<span class="token punctuation">]</span>+$ <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+                        dir_name<span class="token operator">=</span>`sed -n <span class="token string">"<span class="token variable">${2}</span>p"</span> <span class="token variable">${ds_file}</span>`
+                        <span class="token keyword">echo</span> <span class="token string">"Path <span class="token variable">${dir_name}</span> deleted!"</span>
+                <span class="token keyword">else</span>
+                        <span class="token keyword">echo</span> <span class="token string">"<span class="token variable">$2</span> is not a number!"</span>
+                <span class="token keyword">fi</span>
+        <span class="token comment" spellcheck="true">#参数-c清空目录栈</span>
+        <span class="token keyword">elif</span> <span class="token punctuation">[</span> <span class="token variable">$1</span> <span class="token operator">==</span> -c <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+                <span class="token operator">></span> <span class="token variable">${ds_file}</span>
+        <span class="token keyword">else</span>
+                <span class="token keyword">echo</span> <span class="token string">"ds: usage: ds [-cdn] or ds pathname"</span>
+        <span class="token keyword">fi</span>
+<span class="token comment" spellcheck="true">#直接加路径，如果路径存在则加入目录栈</span>
+<span class="token comment" spellcheck="true">##如果路径已在目录栈中则提高位次到第一位</span>
+<span class="token keyword">elif</span> <span class="token punctuation">[</span> -d <span class="token variable">$1</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+        dir_name<span class="token operator">=</span><span class="token variable"><span class="token variable">`</span>lp $1<span class="token variable">`</span></span>
+        grep_result<span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">grep</span> -n ^$<span class="token punctuation">{</span>dir_name<span class="token punctuation">}</span>$ $<span class="token punctuation">{</span>ds_file<span class="token punctuation">}</span><span class="token variable">`</span></span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">"<span class="token variable">${grep_result}</span>"</span> <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+                <span class="token function">sed</span> -i <span class="token string">"<span class="token variable">${grep_result%%:*}</span>d"</span> <span class="token variable">${ds_file}</span>
+        <span class="token keyword">fi</span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> -s <span class="token variable">${ds_file}</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+                <span class="token function">sed</span> -i <span class="token string">"1i<span class="token variable">${dir_name}</span>"</span> <span class="token variable">${ds_file}</span>
+        <span class="token keyword">else</span>
+                <span class="token keyword">echo</span> <span class="token variable">${dir_name}</span> <span class="token operator">></span> <span class="token variable">${ds_file}</span>
+        <span class="token keyword">fi</span>
+        <span class="token function">cat</span> -n <span class="token variable">${ds_file}</span>
+<span class="token keyword">else</span>
+        <span class="token keyword">echo</span> <span class="token string">"<span class="token variable">$1</span> does not exist or is not a directory!"</span>
+<span class="token keyword">fi</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>​    简单写了个脚本以完成所需要的操作，将脚本放入bin文件下并赋予可执行权限。</p>
+<p>​    注意：需要储存目录栈的文件存在，虽然- c 参数可以产生文件，但是没有判断其路径的存在。</p>
+<p>​    注意：对于切换当前文件夹操作需要在父进程下运行，建议将“ . ds -n ”在配置文件中别名，以方便切换路径操作。</p>
+<p>​    不算别名的话，用一个命令就可以完成这些操作了，虽然没有linux的目录栈操作功能丰富，但总之能很好的满足我的需求了，而且没有了会偶联当前路径的烦恼，更符合我的操作习惯。也许这个方法效率不是最高的，但是能实现功能就好嘛。终于写好了，上来就先把最近常用的文件夹路径和bin文件路径加在里面了，终于免去了反复输入那些超长路径的烦恼，爽！</p>
 
                 
             </div>
