@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="My First Blog, 是七七呀！">
-    <meta name="description" content="主要为了测试一下">
+    <meta name="keywords" content="linux目录栈, 是七七呀！">
+    <meta name="description" content="折腾了一下目录栈，方便在Linux系统的目录间切换">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>My First Blog | 是七七呀！</title>
+    <title>linux目录栈 | 是七七呀！</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -257,12 +257,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/image/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/xxx.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">My First Blog</h1>
+                    <h1 class="description center-align post-title">linux目录栈</h1>
                 </div>
             </div>
         </div>
@@ -376,9 +376,21 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Linux/">
+                                <span class="chip bg-color">Linux</span>
+                            </a>
+                        
+                            <a href="/tags/Bash/">
+                                <span class="chip bg-color">Bash</span>
+                            </a>
+                        
+                            <a href="/tags/%E7%9B%AE%E5%BD%95%E6%A0%88/">
+                                <span class="chip bg-color">目录栈</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -386,8 +398,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%8D%9A%E5%AE%A2/" class="post-category">
-                                博客
+                            <a href="/categories/Linux/" class="post-category">
+                                Linux
                             </a>
                         
                     </div>
@@ -420,9 +432,125 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Hello-World！"><a href="#Hello-World！" class="headerlink" title="Hello World！"></a>Hello World！</h1><hr>
-<p>终于成功了！花了不少精力建了个小博客，希望可以记录一些自己学习的东西。</p>
-<p>顺带一提，首页那只猫真的难画，虽然是从网上copy的，但还是用了好久好久的时间去调整，也不知道为什么调的越来越肥。</p>
+                <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>​    最近常在服务器上跑任务，但是服务器上跑过的任务太多，工作目录下很多项目的文件，路径也较长，每次进入目标文件夹的时候，即使用tab补全也需要花很多时间来输入绝对路，而每个项目需要的文件夹较少，就固定那么几个，就希望能够暂时将近期常用的文件夹路径暂时存起来，以便调用，换下个项目的时候也可以用新的路径替代老的路径，于是想到了目录栈。</p>
+<hr>
+<h2 id="Linux目录栈操作"><a href="#Linux目录栈操作" class="headerlink" title="Linux目录栈操作"></a>Linux目录栈操作</h2><p>​    Linux目录栈常用命令有三个，dirs：用于打印目录栈，pushd：用于目录栈的写入和调用，popd：用于目录栈的删除。</p>
+<h3 id="dirs"><a href="#dirs" class="headerlink" title="dirs"></a>dirs</h3><p>​    dirs命令可以打印当前目录栈下的全部内容。</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">dirs</span>
+~ ~/dir2 ~/dir1
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">dirs</span> -l
+/home/yangzhuoxuan /home/yangzhuoxuan/dir2 /home/yangzhuoxuan/dir1
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">dirs</span> -p
+~
+~/dir2
+~/dir1
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">dirs</span> -v
+ 0  ~
+ 1  ~/dir2
+ 2  ~/dir1
+ 
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">dirs</span> -lv
+-bash: dirs: -lv: invalid number
+dirs: usage: <span class="token function">dirs</span> <span class="token punctuation">[</span>-clpv<span class="token punctuation">]</span> <span class="token punctuation">[</span>+N<span class="token punctuation">]</span> <span class="token punctuation">[</span>-N<span class="token punctuation">]</span>
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">dirs</span> -l -v
+ 0  /home/yangzhuoxuan
+ 1  /home/yangzhuoxuan/dir2
+ 2  /home/yangzhuoxuan/dir1
+ 
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">dirs</span> -c
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">dirs</span>
+~
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>dirs ： 打印当前目录栈内容。</p>
+<p>​    -l ： 显示完整绝对路径，注意第一条是当前路径。</p>
+<p>​    -p ： 分行打印多条路径。</p>
+<p>​    -v ： 与 -p 相同，都是分行打印多条路径，但是 -v 参数会在每行前加上索引，可读性更高。其中序号0为当前路径。</p>
+<p>​    -c ： 清空当前目录栈。由于目录栈第一条是当前路径，清空以后只剩下当前路径。</p>
+<p>补充：dirs命令与ls不同，参数不可以合在一起，如果想要分行显示完整绝对路径，需要 -l -v ，不可以 -lv。</p>
+<p>补充：dirs -v命令更直观常用，但是命令太长还需要参数不方便输入，可以在配置中别名为dv。</p>
+<h3 id="pushd"><a href="#pushd" class="headerlink" title="pushd"></a>pushd</h3><p>​    pushd命令可以将路径写入目录栈，也可以进入目录栈中的路径。</p>
+<p>​    ※ 由于目录栈第一条（ index 为 0 ）为当前路径，所以在目录栈第一条路径发生改变时，当前路径也会随之改变到目标路径。</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ dv
+ 0  ~
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">pushd</span> dir1
+~/dir1 ~
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 dir1<span class="token punctuation">]</span>$ <span class="token function">pushd</span> ~/dir2
+~/dir2 ~/dir1 ~
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 dir2<span class="token punctuation">]</span>$ dv
+ 0  ~/dir2
+ 1  ~/dir1
+ 2  ~
+
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 dir2<span class="token punctuation">]</span>$ <span class="token function">pushd</span>
+~/dir1 ~/dir2 ~
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 dir1<span class="token punctuation">]</span>$ dv
+ 0  ~/dir1
+ 1  ~/dir2
+ 2  ~
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 dir1<span class="token punctuation">]</span>$ <span class="token function">pushd</span> +1
+~/dir2 ~ ~/dir1
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 dir2<span class="token punctuation">]</span>$ <span class="token function">pushd</span> +2
+~/dir1 ~/dir2 ~
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 dir1<span class="token punctuation">]</span>$ dv
+ 0  ~/dir1
+ 1  ~/dir2
+ 2  ~
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 dir1<span class="token punctuation">]</span>$ <span class="token function">pushd</span> -0
+~ ~/dir1 ~/dir2
+
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">dirs</span> -c
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">pushd</span> -n ~/dir1
+~ ~/dir1
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">pushd</span> -n lalalala
+~ lalalala ~/dir1
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 ~<span class="token punctuation">]</span>$ <span class="token function">pushd</span> +1
+-bash: pushd: lalalala: No such <span class="token function">file</span> or directory
+
+<span class="token punctuation">(</span>base<span class="token punctuation">)</span> <span class="token punctuation">[</span>yangzhuoxuan@cngb-login-0-1 dir1<span class="token punctuation">]</span>$ <span class="token function">pushd</span> <span class="token variable"><span class="token variable">`</span><span class="token function">pwd</span><span class="token variable">`</span></span>
+~/dir1 ~/dir1
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>pushd：调用目录栈内的路径。</p>
+<p>​    直接加路径：将路径加入目录栈的第一条，原目录栈向后顺延。由于改变了第一条路径，当前目录同样发生改变。</p>
+<p>​    不加任何参数：将目录栈 index 为 0 和 1 的路径互调，即目录栈前两条，同时改变当前路径。</p>
+<p>​    +Num：注意+和输入Num中没有空格。将目录栈的 index 为 0 和第 Num （即 index 为 Num ）的两条路径互调，同时改变当前路径。互调以后目标路径的 index 为 0 ，如果此时再 cd 更改当前路径，则会改变目录栈中的内容，保存在目录栈中的内容将不复存在。</p>
+<p>​    -Num：同 +Num ，不过 +Num 是从正着数第 Num 的路径，等同于 index 号码，-Num 是倒着数的，类似 tail 操作，除非目录栈过长时调用在后面的路径，否则并不常用。</p>
+<p>​    -n 路径：将输入的文字直接加入目录栈第二条（ index 为 1 ）。不改变目录栈第一条路径，不更改当前文件夹。注意此操作中不管输入的路径是否存在，都会直接加入目录栈，不进行判断。</p>
+<p>补充：如果希望将当前路径加入目录栈，不要使用管道符，可以使用反引号操作。</p>
+<p>个人并不是很喜欢这套 pushd 的操作，尤其是会发生当前路径的更改，很不适应，如果 pushd 进入了哪个路径，一旦习惯性 cd 改变了当前文件夹又会损失掉我的目录栈内容。唯一不发生当前路径更改的操作 -n 又不会判断目录是否存在，发生了错误只有切换路径的时候才能发现。</p>
+<h3 id="popd"><a href="#popd" class="headerlink" title="popd"></a>popd</h3><p>​    popd命令与pushd的添加功能相反，用于删除目录栈中的内容。</p>
+<pre><code>(base) [yangzhuoxuan@cngb-login-0-1 ~]$ dv
+ 0  ~
+ 1  ~/dir1
+ 2  ~/dir2
+(base) [yangzhuoxuan@cngb-login-0-1 ~]$ popd
+~/dir1 ~/dir2
+(base) [yangzhuoxuan@cngb-login-0-1 dir1]$ pwd
+/home/yangzhuoxuan/dir1
+
+(base) [yangzhuoxuan@cngb-login-0-1 ~]$ dv
+ 0  ~
+ 1  ~/dir1
+ 2  ~/dir2
+(base) [yangzhuoxuan@cngb-login-0-1 ~]$ popd ~/dir2
+~ ~/dir1
+
+(base) [yangzhuoxuan@cngb-login-0-1 ~]$ dv
+ 0  ~
+ 1  ~/dir1
+ 2  ~/dir2
+(base) [yangzhuoxuan@cngb-login-0-1 ~]$ popd +1
+~ ~/dir2
+</code></pre>
+<p>popd：删除目录栈内容</p>
+<p>​    不加任何参数：删除目录栈第一条路径内容，同时改变当前目录。</p>
+<p>​    直接加路径：删除目标路径。</p>
+<p>​    +Num：注意+和输入Num中没有空格。删除目录栈中第 Num （即 index 为 Num ）的路径。</p>
+<p>​    -Num：+Num的另一个方向的操作。</p>
+<p>​    -n 路径：删除目标路径。</p>
+<p>补充：如果 popd 后面添加路径不存在，则会删除目录栈最后一条路径。如果目录栈中有不存在的路径， popd 直接加相同不存在的路径内容，依旧会删除最后一条路径而不删除同名内容，使用 -n 路径 的参数则可以删除同名内容。</p>
+<hr>
+<h2 id="自己改进的目录栈"><a href="#自己改进的目录栈" class="headerlink" title="自己改进的目录栈"></a>自己改进的目录栈</h2><p>​    Linux自带的目录栈由于种种问题，并不能很好的满足我日常使用。对于一个更改目录使用 cd 成习惯的人，经常在添加目录栈时产生不必要的当前目录跳转，和将目录栈内容的修改，对于个人使用而言，将当前工作目录和目录栈的 index 0 联系起来只带来了许多麻烦。目录栈对于我最大的不方便在于目录栈不能永久储存，每次重启服务器就会消失，打开多个服务器页面又不能同步。</p>
+<p>​    于是产生了针对自己的需要改进一下目录栈的想法。需要一个文件来储存目录路径，同样类似linux目录栈的操作，需要可以对其打印、目标路径调用，压入和弹出四个操作。</p>
 
                 
             </div>
@@ -449,7 +577,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://yzx4873.top/2022/03/18/hello_world/">https://yzx4873.top/2022/03/18/hello_world/</a>
+                    <a href="https://yzx4873.top/2022/03/18/linux%E7%9B%AE%E5%BD%95%E6%A0%88/">https://yzx4873.top/2022/03/18/linux%E7%9B%AE%E5%BD%95%E6%A0%88/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -486,7 +614,19 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/Linux/">
+                                    <span class="chip bg-color">Linux</span>
+                                </a>
+                            
+                                <a href="/tags/Bash/">
+                                    <span class="chip bg-color">Bash</span>
+                                </a>
+                            
+                                <a href="/tags/%E7%9B%AE%E5%BD%95%E6%A0%88/">
+                                    <span class="chip bg-color">目录栈</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -532,9 +672,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/03/18/linux%E7%9B%AE%E5%BD%95%E6%A0%88/">
                     <div class="card-image">
@@ -551,9 +692,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-03-18
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-18
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -566,6 +707,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -589,7 +731,7 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
                 <a href="/2022/03/18/hello_world/">
@@ -622,7 +764,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
