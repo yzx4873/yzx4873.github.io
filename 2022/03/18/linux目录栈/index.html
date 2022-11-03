@@ -557,20 +557,20 @@ dirs: usage: <span class="token function">dirs</span> <span class="token punctua
 ds_file<span class="token operator">=</span>/home/yangzhuoxuan/data/lib/DirectoryStack/list
 <span class="token comment" spellcheck="true">#不加参数则打印当前目录栈</span>
 <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">"<span class="token variable">$*</span>"</span> <span class="token operator">==</span> <span class="token string">""</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
-        <span class="token function">cat</span> -n <span class="token variable">${ds_file}</span>
+        <span class="token function">cat</span> -n $<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;ds_file&amp;#125;</span>
 <span class="token comment" spellcheck="true">#参数[-cdn]</span>
 <span class="token keyword">elif</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token variable">$1</span> <span class="token operator">==</span> -* <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
         <span class="token comment" spellcheck="true">#参数-n加数字，转到第几个路径</span>
         <span class="token comment" spellcheck="true">##如果路径不存在则从目录栈中删除，防止文件夹删除而目录栈中未删除</span>
         <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$1</span> <span class="token operator">==</span> -n <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
                 <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token variable">$2</span> <span class="token operator">=</span>~ ^<span class="token punctuation">[</span>0-9<span class="token punctuation">]</span>+$ <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
-                        dir_name<span class="token operator">=</span>`sed -n <span class="token string">"<span class="token variable">${2}</span>p"</span> <span class="token variable">${ds_file}</span>`
-                        <span class="token keyword">if</span> <span class="token punctuation">[</span> -d <span class="token variable">${dir_name}</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
-                                <span class="token keyword">echo</span> <span class="token variable">${dir_name}</span>
-                                <span class="token function">cd</span> <span class="token variable">${dir_name}</span>
+                        dir_name<span class="token operator">=</span>`sed -n <span class="token string">"$&amp;#123;2&amp;#125;p"</span> $<span class="token operator">&amp;</span>#123<span class="token punctuation">;</span>ds_file<span class="token operator">&amp;</span>#125<span class="token punctuation">;</span>`
+                        <span class="token keyword">if</span> <span class="token punctuation">[</span> -d $<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;dir_name&amp;#125; ];then</span>
+                                <span class="token keyword">echo</span> $<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;dir_name&amp;#125;</span>
+                                <span class="token function">cd</span> $<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;dir_name&amp;#125;</span>
                         <span class="token keyword">else</span>
-                                <span class="token keyword">echo</span> <span class="token string">"<span class="token variable">${dir_name}</span> does not exist or is not a directory! Path deleted!"</span>
-                                <span class="token function">sed</span> -i <span class="token string">"<span class="token variable">${2}</span>d"</span> <span class="token variable">${ds_file}</span>
+                                <span class="token keyword">echo</span> <span class="token string">"$&amp;#123;dir_name&amp;#125; does not exist or is not a directory! Path deleted!"</span>
+                                <span class="token function">sed</span> -i <span class="token string">"$&amp;#123;2&amp;#125;d"</span> $<span class="token operator">&amp;</span>#123<span class="token punctuation">;</span>ds_file<span class="token operator">&amp;</span>#125<span class="token punctuation">;</span>
                         <span class="token keyword">fi</span>
                 <span class="token keyword">else</span> 
                         <span class="token keyword">echo</span> <span class="token string">"<span class="token variable">$2</span> is not a number!"</span>
@@ -578,14 +578,14 @@ ds_file<span class="token operator">=</span>/home/yangzhuoxuan/data/lib/Director
         <span class="token comment" spellcheck="true">#参数-d加数字，从目录栈中删除第几个路径</span>
         <span class="token keyword">elif</span> <span class="token punctuation">[</span> <span class="token variable">$1</span> <span class="token operator">==</span> -d <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
                 <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token variable">$2</span> <span class="token operator">=</span>~ ^<span class="token punctuation">[</span>0-9<span class="token punctuation">]</span>+$ <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
-                        dir_name<span class="token operator">=</span>`sed -n <span class="token string">"<span class="token variable">${2}</span>p"</span> <span class="token variable">${ds_file}</span>`
-                        <span class="token keyword">echo</span> <span class="token string">"Path <span class="token variable">${dir_name}</span> deleted!"</span>
+                        dir_name<span class="token operator">=</span>`sed -n <span class="token string">"$&amp;#123;2&amp;#125;p"</span> $<span class="token operator">&amp;</span>#123<span class="token punctuation">;</span>ds_file<span class="token operator">&amp;</span>#125<span class="token punctuation">;</span>`
+                        <span class="token keyword">echo</span> <span class="token string">"Path $&amp;#123;dir_name&amp;#125; deleted!"</span>
                 <span class="token keyword">else</span>
                         <span class="token keyword">echo</span> <span class="token string">"<span class="token variable">$2</span> is not a number!"</span>
                 <span class="token keyword">fi</span>
         <span class="token comment" spellcheck="true">#参数-c清空目录栈</span>
         <span class="token keyword">elif</span> <span class="token punctuation">[</span> <span class="token variable">$1</span> <span class="token operator">==</span> -c <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
-                <span class="token operator">></span> <span class="token variable">${ds_file}</span>
+                <span class="token operator">></span> $<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;ds_file&amp;#125;</span>
         <span class="token keyword">else</span>
                 <span class="token keyword">echo</span> <span class="token string">"ds: usage: ds [-cdn] or ds pathname"</span>
         <span class="token keyword">fi</span>
@@ -593,16 +593,16 @@ ds_file<span class="token operator">=</span>/home/yangzhuoxuan/data/lib/Director
 <span class="token comment" spellcheck="true">##如果路径已在目录栈中则提高位次到第一位</span>
 <span class="token keyword">elif</span> <span class="token punctuation">[</span> -d <span class="token variable">$1</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
         dir_name<span class="token operator">=</span><span class="token variable"><span class="token variable">`</span>lp $1<span class="token variable">`</span></span>
-        grep_result<span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">grep</span> -n ^$<span class="token punctuation">{</span>dir_name<span class="token punctuation">}</span>$ $<span class="token punctuation">{</span>ds_file<span class="token punctuation">}</span><span class="token variable">`</span></span>
-        <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">"<span class="token variable">${grep_result}</span>"</span> <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
-                <span class="token function">sed</span> -i <span class="token string">"<span class="token variable">${grep_result%%:*}</span>d"</span> <span class="token variable">${ds_file}</span>
+        grep_result<span class="token operator">=</span>`grep -n ^$<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;dir_name&amp;#125;$ $&amp;#123;ds_file&amp;#125;`</span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">"$&amp;#123;grep_result&amp;#125;"</span> <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+                <span class="token function">sed</span> -i <span class="token string">"$&amp;#123;grep_result%%:*&amp;#125;d"</span> $<span class="token operator">&amp;</span>#123<span class="token punctuation">;</span>ds_file<span class="token operator">&amp;</span>#125<span class="token punctuation">;</span>
         <span class="token keyword">fi</span>
-        <span class="token keyword">if</span> <span class="token punctuation">[</span> -s <span class="token variable">${ds_file}</span> <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
-                <span class="token function">sed</span> -i <span class="token string">"1i<span class="token variable">${dir_name}</span>"</span> <span class="token variable">${ds_file}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> -s $<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;ds_file&amp;#125; ];then</span>
+                <span class="token function">sed</span> -i <span class="token string">"1i$&amp;#123;dir_name&amp;#125;"</span> $<span class="token operator">&amp;</span>#123<span class="token punctuation">;</span>ds_file<span class="token operator">&amp;</span>#125<span class="token punctuation">;</span>
         <span class="token keyword">else</span>
-                <span class="token keyword">echo</span> <span class="token variable">${dir_name}</span> <span class="token operator">></span> <span class="token variable">${ds_file}</span>
+                <span class="token keyword">echo</span> $<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;dir_name&amp;#125; > $&amp;#123;ds_file&amp;#125;</span>
         <span class="token keyword">fi</span>
-        <span class="token function">cat</span> -n <span class="token variable">${ds_file}</span>
+        <span class="token function">cat</span> -n $<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;ds_file&amp;#125;</span>
 <span class="token keyword">else</span>
         <span class="token keyword">echo</span> <span class="token string">"<span class="token variable">$1</span> does not exist or is not a directory!"</span>
 <span class="token keyword">fi</span>
